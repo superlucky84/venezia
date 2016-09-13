@@ -1,0 +1,258 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+	
+	/*background-color: black;*/
+	position: relative;
+	min-height: 100%;
+}
+
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+body > .container {
+  padding: 60px 0 0;
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+.fl{
+	float: left;
+}
+
+.user_screen{
+	position: relative;
+	width: 100%;
+	height: 832px;
+	/*border: 1px solid black;*/
+	float: left;
+	margin: 7px 5px;
+
+
+}
+
+.user_screen .bottom_wrap{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+
+}
+
+
+/*
+.scale{
+    transform:scale(0.5,0.5);
+    -moz-transform:scale(0.5,0.5);
+    -webkit-transform:scale(0.5,0.5);
+    -o-transform:scale(0.5,0.5);
+}
+*/
+
+.user_sky{
+	top: 0px;
+	border: 7px solid gray;
+	height: 700px;
+	width: 100%;
+	margin: auto;
+
+}
+
+
+.rotate-1{
+	-webkit-transform: rotate(-1deg);
+	-moz-transform: rotate(-1deg);
+	-o-transform: rotate(-1deg);
+}
+.rotate2{
+	-webkit-transform: rotate(2deg);
+	-moz-transform: rotate(2deg);
+	-o-transform: rotate(2deg);
+}
+.rotate-2{
+	-webkit-transform: rotate(-2deg);
+	-moz-transform: rotate(-2deg);
+	-o-transform: rotate(-2deg);
+}
+    
+    
+
+#location_me .user_sky{
+	border: 7px solid #fff;
+}
+
+.user_sky > .word_position{
+	position: absolute;
+	font-family:courier New,courier;
+	font-weight: bold;
+	color: #dfdfdf;
+}
+div.user_sky.gameover{
+	background-color: gray;
+	opacity: 0.5;
+}
+
+div.user_result{
+	position: absolute;
+	width: 70%;
+	height: 200px;
+	z-index: 100;
+	top: 280px;
+	left: 14%;
+	text-align: center;
+	padding-top: 23px;
+	color: #fff
+}
+
+.user_handle{
+	width: 100%;
+}
+
+.user_handle > div.handle_item{
+	position: absolute;
+	bottom: 144px;
+	left: 50%;
+	margin-left: -123px;
+}
+.user_handle > div.handle_item > button{
+	width: 23px;
+	height: 23px;
+	margin: 2px;
+	padding: 0px;
+	color: red;
+	outline: 0;
+	box-shadow: none;
+	-moz-border-radius:0px;
+	-webkit-border-radius:0px;
+	border-radius:0px;
+	border: 3px solid #dfdfdf;
+	background-color: #000;
+}
+.user_handle > div.handle_item > button.fill{
+	background-color: #dfdfdf;
+}
+
+/*
+#location_other .user_handle > div.handle_item{
+	border:1px solid red;
+	float: right;
+	width: 172px;
+	margin-right: 21%;
+	padding-bottom: 25px;
+}
+*/
+
+.user_handle > div.info_item{
+	position: absolute;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	color: #dfdfdf;
+	border: 7px solid #dfdfdf;
+	border-bottom:3px solid #dfdfdf;
+	padding: 11px 0px 11px 20px;
+	background-color: #000;
+}
+
+div.info_item > div{
+	float: left;
+	margin-right: 19px;
+}
+
+div.c_button{
+	position: absolute;
+	left: 50%;
+	top: 350px;
+	margin-left: -96px;
+}
+div.c_button > input{
+	color: #dfdfdf;
+	background-color: black;
+	border: 3px solid #dfdfdf;
+	width: 100px;
+}
+
+div.c_button_ing > input{
+	width: 55px;
+}
+
+div.c_button_ing > input{
+	color: #dfdfdf;
+	background-color: black;
+	border: 3px solid #dfdfdf;
+	width: 55px;
+}
+
+
+.handle_input{
+	width: 240px;
+	height: 44px;
+	left: 0px;
+	margin-left: 2px;
+	margin-bottom: 2px;
+	border-color:#dfdfdf;
+	border: 4px solid #dfdfdf;
+	background-color:#000;
+	color: #dfdfdf;
+	outline: none;
+	padding-left: 7px;
+	font-weight: bold;
+}
+
+.mainpage{
+  padding: 10px 0 0;
+  width: 100%;
+}
+.scale{
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin: 0 0;
+}
+
+.user_list{
+	position: absolute;
+	overflow: scroll;
+	display: none;
+	border: 1px solid #cdcdcd;
+	width: 300px;
+	height: 300px;
+	top: 103px;
+	left: 105px;
+	background-color: #fff;
+	border-radius: 13px;
+	padding: 10px;
+	z-index: 100;
+}
+
+.rk_area{
+	display:none;
+	border-radius: 13px;
+	padding: 10px;
+	position:absolute;
+	border:1px solid #eeeeee;
+	width:300px;
+	background-color:#fff;
+	height:300px;
+}
+
+
+.room_list{
+	float: left;
+	width: 50%;
+	height: 100%;
+	padding: 10px;
+}
+.main_view{
+	float: left;
+	width: 50%;
+	height: 100%;
+	padding: 10px;
+}
+.margin-b9{
+	margin-bottom: 9px;
+}
+
+
+

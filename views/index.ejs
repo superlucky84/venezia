@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html ng-app="venezia">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>VENEZIA</title>
+
+<script src="/javascripts/jquery-2.1.3.js?v=20150310-16"></script>
+<script src="/javascripts/bootstrap.js?v=20150310-16"></script>
+<script src="/javascripts/angular.js?v=20150310-16"></script>
+<script src="/javascripts/ui_bootstrap.js?v=20150310-16"></script>
+<script src="/javascripts/angular-animate.js?v=20150310-16"></script>
+<script src="/javascripts/angular-cookies.js?v=20150310-16"></script>
+<script src="/javascripts/socket.io.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css?v=20150310-16" />
+<link rel="stylesheet" type="text/css" href="/stylesheets/main.css?v=20150310-16" />
+
+<script>
+	var venezia = angular.module('venezia', ['ngCookies','ngAnimate','ui.bootstrap']);
+</script>
+
+</head>
+
+<body ng-controller="gameController">
+
+
+<!-- 로그인 화면 -->
+<div class="container mainpage" ng-hide="join" id="j-test">
+
+	<div class="user_list">
+		<table class="table">
+			<colgroup>
+				<col width="30%">
+				<col width="55%">
+				<col width="15%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>닉네임</th>
+					<th>등록시간</th>
+					<th style="cursor:pointer;" id="all-del" ng-click="delete_user($event,'all')">Del</th>
+				</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="user_info in user_list">
+				<td>{{user_info.nickname}}</th>
+				<td>{{user_info.regdate}}</td>
+				<td style="cursor:pointer">x</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="room_list">
+		<ul class="nav nav-tabs">
+			<li role="presentation" ng-class="{active: room_type=='wait'}" ng-click="roomtypechange($event,'wait')"><a href="#" id="left_menu_wait">대기중</a></li>
+			<li role="presentation" ng-class="{active: room_type=='ing'}"  ng-click="roomtypechange($event,'ing')"><a href="#" id="left_menu_ing">진행중</a></li>
+			<li role="presentation" ng-class="{active: room_type=='end'}"  ng-click="roomtypechange($event,'end')"><a href="#" id="left_menu_end">끝난방</a></li>
+			<li role="presentation" ng-class="true"  ng-click="view_user($event)" style="focus:blur;"><a href="#" id="left_menu_user">유저</a></li>
+		</ul>
+		<table class="table">
+			<colgroup>
+				<col width="33%">
+				<col width="33%">
+				<col width="33%">
+			</colgroup>
+			<thead>
+				<tr>
+					<th>생성시간</th>
+					<th>방장</th>
+					<th>방이름</th>
+				</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="room_info in wait_room_list" name="wait_room" ng-show="room_type=='wait'">
+				<td>{{room_info.reg_date}}</th>
+				<td>{{room_info.creater}}</td>
+				<td>{{room_info.room_name}}</td>
+			</tr>
+			<tr ng-repeat="room_info in ing_room_list" name="ing_room" ng-show="room_type=='ing'">
+				<td>{{room_info.reg_date}}</th>
+				<td>{{room_info.creater}}</td>
+				<td>{{room_info.room_name}}</td>
+			</tr>
+			<tr ng-repeat="room_info in end_room_list" name="end_room" ng-show="room_type=='end'">
+				<td>{{room_info.reg_date}}</th>
+				<td>{{room_info.creater}}</td>
+				<td ng-click="view_ranking($event)" style="cursor:pointer">
+					{{room_info.room_name}}
+					<div class="rk_area">
+						<table class="table">
+							<colgroup>
+								<col width="20%">
+								<col width="80%">
+							</colgroup>
+							<thead>
+								<tr>
+									<th>순위</th>
+									<th>닉네임</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr ng-repeat="(key,rk) in room_info.ranking">
+								<td>{{key}}</th>
+								<td>{{rk}}</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="main_view">
+
+		<ul class="nav nav-tabs margin-b9">
+			<li role="presentation" ng-class="{active: join_type==true}"  ng-click="jointype($event,1)">
+				<a href="#" id="create_room">방생성</a>
+			</li>
+			<li role="presentation" ng-class="{active: join_type==false}" ng-click="jointype($event,0)">
+				<a href="#" id="join_room">방입장</a>
+			</li>
+		</ul>
+
+		<div class="room_join">
+			<div class="form-group" ng-show="join_type">
+				<label for="roomname"> 방이름 </label>
+				<input type="text" class="form-control" id="roomname" name="roomname" ng-model="roomname">
+			</div>
+			<div class="form-group" ng-hide="join_type">
+				<label for="roomname_select"> 방선택 </label>
+				<select id="roomname_select" class="form-control" name="roomname_select" ng-model="roomname_select">
+					<option value="">-</option>
+					<option value="{{room_info.room_name}}" ng-repeat="room_info in wait_room_list">{{room_info.room_name}}</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="nicname"> 닉네임 </label>
+				<input type="text" class="form-control" id="nicname" name="nicname" ng-model="nickname">
+			</div>
+			<div class="form-group">
+				<label for="nic_pass"> 패스워드 </label>
+				<input type="password" class="form-control" id="nic_pass" name="nic_pass" ng-model="nic_pass">
+			</div>
+			<div class="form-group">
+				<label for="start_level"> 시작레벨 </label>
+				<select id="start_level" class="form-control" name="start_level" ng-model="start_level">
+					<option value="0">-</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="word_lang"> 단어선택 </label>
+				<select id="word_lang" class="form-control" name="word_lang" ng-model="word_lang">
+					<option value="0">-</option>
+					<option value="javascript">javascript</option>
+					<option value="java">java</option>
+					<option value="php">php</option>
+					<option value=".net">.net</option>
+				</select>
+			</div>
+			<button type="button"  id="nic_ok" class="btn btn-default" ng-click="join_game($event)">입장</button>
+		</div>
+	</div>
+
+
+
+	<!--
+	<label for="nic_ok">
+		<input type="button" value="입장" id="nic_ok"  ng-click="join_game($event)">
+	</label>
+	-->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Begin page content -->
+<div class="mainpage transarea" ng-show="join">
+
+
+	<!-- Me 유저 영역 -->
+	<div id="location_me" class="user_screen">
+		<!-- Target -->
+		<div class="user_sky">
+			<!--span style="position:absolute;top:10px;left:0px;"> continue </span>
+			<span style="position:absolute;top:30px;left:0px;"> continue </span-->
+		</div>
+
+		<!-- Handle -->
+		<div class="user_handle">
+			<div class="info_item">
+				<div>NICKNAME : <span class='nickname'></span></div>
+				<div>LEVEL    : <span class='h_level'></span></div>
+				<div>HIT      : <span class='h_hit'  ></span></div>
+				<div>LANG     : <span class='h_lang' ></span></div>
+				<div class="c_button_ing"></div>
+				<div class="c_button">
+					<input type="button" value="시작" id="start_game" ng-click="game_start($event)" />
+					<input type="button" value="나가기" id="exit_game" ng-click="game_exit($event)" />
+				</div>
+			</div>
+			<div class="handle_item">
+				<input type="text" id="handle" name="handle" value="" ng-enter="target_destroy($event)" ng-model="handle" class="handle_input" />
+				<br>
+				<button  class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button
+				><button class="fill"></button>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Other 유저 영역 4인까지 추가가능 -->
+	<div id="location_other">
+	</div>
+</div>
+
+
+<!-- 유저 화면 Template -->
+<script type="text/ng-template" id="screen_unit.html">
+	<!-- Target -->
+	<div class="user_sky">
+	</div>
+
+	<!-- Handle -->
+	<div class="user_handle">
+		<div class="info_item">
+			<div>NICKNAME : <span class='nickname'></span></div>
+			<div>LEVEL    : <span class='h_level'></span></div>
+			<div>HIT      : <span class='h_hit'  ></span></div>
+			<div>LANG     : <span class='h_lang' ></span></div>
+		</div>
+		<div class="handle_item">
+			<button  class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button
+			><button class="fill"></button>
+		</div>
+	</div>
+</script>
+
+<script src="/javascripts/venezia.js"></script>
+</body>
+</html>
