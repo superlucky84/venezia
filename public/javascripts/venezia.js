@@ -98,7 +98,7 @@ venezia.controller('gameController', function ($scope,$http,$compile,$cookieStor
 
 	$scope.user_list = {};
 
-	var socket = io.connect('http://localhost:50000');
+	var socket = io.connect('http://104.236.113.81:50000');
 
 
 	console.log('room_list');

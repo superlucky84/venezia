@@ -3,6 +3,7 @@ var socketio = require('socket.io');
 var mysql    = require('mysql');
 
 var client = mysql.createConnection({
+  host : '104.236.113.81',
 	user : 'root',
 	password : 'dnwlsrla',
 	database : 'chatgame'
@@ -483,9 +484,12 @@ io.sockets.on('connection', function (socket) {
 				"'+getDateTime()+'" \
 			); \
 		';
+    console.log(chk_sql);
 
 		client.query(chk_sql,function(error,results){
 			// 등록 안되어 있으면 테이블에 인서트
+      console.log(error);
+      console.log(results);
 			if(results[0]['cnt']==0){
 				console.log("insert_sql");
 				console.log(insert_sql);
@@ -494,7 +498,7 @@ io.sockets.on('connection', function (socket) {
 			// 등록이 되으면 패스워드 체크
 			else{
 				if(pass != results[0]['password']){
-					io.sockets.connected[socket.id].emit('alert','닉네임 패스워드가 틀렸습니다.');
+					io.sockets.connected[socket.id].emit('alert','닉네임에 해당하는 패스워드가 틀렸습니다.');
 					return false;
 				}
 			}
